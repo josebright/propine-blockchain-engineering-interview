@@ -1,0 +1,10 @@
+# PERQUISITE
+- Node setup
+- TypeSript setup
+
+# USAGE
+- Create assets folder
+- Paste csv file in assets folder
+- Edit file name in main.ts if not corresponding
+- run "yarn global add nodemon" (if you don't have nodemon installed)
+- run "yarn dev" or "yarn prod" depending on environment
