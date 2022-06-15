@@ -9,3 +9,6 @@
 - run "yarn global add nodemon" (if you don't have nodemon installed)
 - run "yarn dev" or "yarn prod" depending on environment
 - input optional values, object of string in the getValue() at the main.ts to test other parameters.
+
+
+## Working with csv file might not be the best approach rather working with database can help to reduce time taken to query data.

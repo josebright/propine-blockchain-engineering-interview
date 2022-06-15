@@ -7,7 +7,7 @@ const init = async () => {
     return;
   }
   const res = await new AnalyzeInvestment(fileName).analyze();
-  const value = await res.getValue({date: "1970-01-19", token: "BTC"});
+  const value = await res.getValue();
   console.log({ value });
 };
 
