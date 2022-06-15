@@ -24,5 +24,8 @@
     "lint": "eslint src/**",
     "dev": "nodemon src/main.ts",
     "prod": "rimraf build && tsc && node build/main.js"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
   }
 }

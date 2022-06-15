@@ -5,11 +5,11 @@ export interface GetLatestValueForATokenPayload {
 }
 
 export interface GetValueForTokensOnADatePayload {
-  date: string;
+  date: string;   // YYYY-MM-DD
 }
 
 export interface GetValueForATokenOnADatePayload {
-  date: string;
+  date: string;   // YYYY-MM-DD
   token: string;
 }
 

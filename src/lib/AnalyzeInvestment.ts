@@ -1,7 +1,8 @@
 import fs, { createWriteStream, WriteStream } from "fs";
 import { join } from "path";
 import readline from "readline";
-import { calculateValue, handleDir } from "../helpers";
+import { resourceLimits } from "worker_threads";
+import { calculateValue, handleDir, getCurrencyRate } from "../helpers";
 import {
   GetLatestValueForAToken,
   GetLatestValueForTokens,
@@ -10,6 +11,8 @@ import {
   GetValueForTokensOnADate,
   TransactionType,
 } from "../interface";
+
+
 
 const outDir = join("temp");
 
@@ -92,7 +95,11 @@ export class AnalyzeInvestment {
   };
 
   private getLatestValueForTokens: GetLatestValueForTokens = async () => {
-    return new Promise(
+    const usdRates = await getCurrencyRate();
+    if(!usdRates){
+      throw new Error("USD rate not gotten");
+    }
+    const res = await new Promise(
       (resolve: (v: Record<string, number>) => void, reject) => {
         try {
           const fileNames = fs.readdirSync(this.outDir);
@@ -114,12 +121,20 @@ export class AnalyzeInvestment {
         }
       }
     );
+    Object.entries(res).forEach(([key, value]) => {
+        res[key] = value * Number(usdRates[key].USD || 0)
+    })
+    return res
   };
 
   private getLatestValueForAToken: GetLatestValueForAToken = async ({
     token,
   }) => {
-    return new Promise((resolve: (v: number) => void, reject) => {
+    const usdRates = await getCurrencyRate();
+    if(!usdRates){
+      throw new Error("USD rate not gotten");
+    }
+    const res = await new Promise((resolve: (v: number) => void, reject) => {
       try {
         const fileNames = fs.readdirSync(this.outDir);
 
@@ -141,12 +156,17 @@ export class AnalyzeInvestment {
         reject((err as any).message);
       }
     });
+    return res * Number(usdRates[token].USD);
   };
 
   private getValueForTokensOnADate: GetValueForTokensOnADate = async ({
     date,
   }) => {
-    return new Promise(
+    const usdRates = await getCurrencyRate();
+    if(!usdRates){
+      throw new Error("USD rate not gotten");
+    }
+    const res = await new Promise(
       (resolve: (v: Record<string, number>) => void, reject) => {
         try {
           const dateObj = new Date(date);
@@ -170,13 +190,21 @@ export class AnalyzeInvestment {
         }
       }
     );
+    Object.entries(res).forEach(([key, value]) => {
+        res[key] = value * Number(usdRates[key].USD || 0)
+    })
+    return res
   };
 
   private getValueForATokenOnADate: GetValueForATokenOnADate = async ({
     date,
     token,
   }) => {
-    return new Promise((resolve: (v: number) => void, reject) => {
+    const usdRates = await getCurrencyRate();
+    if(!usdRates){
+      throw new Error("USD rate not gotten");
+    }
+    const res = await new Promise((resolve: (v: number) => void, reject) => {
       try {
         const dateObj = new Date(date);
 
@@ -200,5 +228,6 @@ export class AnalyzeInvestment {
         reject((err as any).message);
       }
     });
+    return res * Number(usdRates[token].USD);
   };
 }
